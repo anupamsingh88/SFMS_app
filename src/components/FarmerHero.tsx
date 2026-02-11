@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, FONT_WEIGHTS, BORDER_RADIUS } from '../constants';
 
@@ -12,64 +12,47 @@ interface FarmerHeroProps {
 
 export default function FarmerHero({ name, subtitle }: FarmerHeroProps) {
     return (
-        <ImageBackground
-            source={require('../../assets/green-field-with-sun.jpg')}
-            style={styles.imageBackground}
-            imageStyle={styles.imageStyle}
+        <LinearGradient
+            colors={[COLORS.primary, COLORS.primaryDark]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.container}
         >
-            <LinearGradient
-                colors={[
-                    'rgba(76, 175, 80, 0.50)',
-                    'rgba(139, 195, 74, 0.55)',
-                    'rgba(104, 159, 56, 0.50)'
-                ]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.container}
-            >
-                <View style={styles.content}>
-                    {/* Farmer Avatar */}
-                    <View style={styles.avatarContainer}>
-                        <LinearGradient
-                            colors={[COLORS.white, COLORS.backgroundLight] as readonly [string, string, ...string[]]}
-                            style={styles.avatar}
-                        >
-                            <Text style={styles.avatarEmoji}>👨‍🌾</Text>
-                        </LinearGradient>
-                    </View>
-
-                    {/* Greeting Text */}
-                    <View style={styles.textContainer}>
-                        <Text style={styles.greeting}>नमस्ते 🙏</Text>
-                        <Text style={styles.name}>{name}</Text>
-                        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
-                    </View>
-
-                    {/* Decorative Farm Elements */}
-                    <View style={styles.decorContainer}>
-                        <Text style={styles.decorEmoji}>🌾</Text>
-                    </View>
+            <View style={styles.content}>
+                {/* Farmer Avatar */}
+                <View style={styles.avatarContainer}>
+                    <LinearGradient
+                        colors={[COLORS.white, COLORS.backgroundLight] as readonly [string, string, ...string[]]}
+                        style={styles.avatar}
+                    >
+                        <Text style={styles.avatarEmoji}>👨‍🌾</Text>
+                    </LinearGradient>
                 </View>
 
-                {/* Background Pattern */}
-                <View style={styles.pattern}>
-                    <View style={[styles.circle, styles.circle1]} />
-                    <View style={[styles.circle, styles.circle2]} />
-                    <View style={[styles.circle, styles.circle3]} />
+                {/* Greeting Text */}
+                <View style={styles.textContainer}>
+                    <Text style={styles.greeting}>नमस्ते 🙏</Text>
+                    <Text style={styles.name}>{name}</Text>
+                    {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
                 </View>
-            </LinearGradient>
-        </ImageBackground>
+
+                {/* Decorative Farm Elements */}
+                <View style={styles.decorContainer}>
+                    <Text style={styles.decorEmoji}>🌾</Text>
+                </View>
+            </View>
+
+            {/* Background Pattern */}
+            <View style={styles.pattern}>
+                <View style={[styles.circle, styles.circle1]} />
+                <View style={[styles.circle, styles.circle2]} />
+                <View style={[styles.circle, styles.circle3]} />
+            </View>
+        </LinearGradient>
     );
 }
 
 const styles = StyleSheet.create({
-    imageBackground: {
-        width: '100%',
-    },
-    imageStyle: {
-        borderBottomLeftRadius: BORDER_RADIUS.xl,
-        borderBottomRightRadius: BORDER_RADIUS.xl,
-    },
     container: {
         width: '100%',
         paddingTop: SPACING.xl,

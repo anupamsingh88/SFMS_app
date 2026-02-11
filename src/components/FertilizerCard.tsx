@@ -83,16 +83,19 @@ export default function FertilizerCard({
 const styles = StyleSheet.create({
     container: {
         width: '48%',
+        minHeight: 180,
         marginBottom: SPACING.md,
         borderRadius: BORDER_RADIUS.lg,
         overflow: 'hidden',
         ...SHADOWS.medium,
+        elevation: 3,
     },
     disabledContainer: {
         opacity: 0.6,
     },
     gradient: {
         padding: SPACING.md,
+        flex: 1,
     },
     header: {
         marginBottom: SPACING.sm,

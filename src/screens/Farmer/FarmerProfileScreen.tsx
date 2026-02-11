@@ -13,9 +13,10 @@ import { COLORS, SPACING, FONT_SIZES, FONT_WEIGHTS, BORDER_RADIUS, SHADOWS } fro
 
 interface FarmerProfileScreenProps {
     farmerName: string;
+    onLogout?: () => void;
 }
 
-export default function FarmerProfileScreen({ farmerName }: FarmerProfileScreenProps) {
+export default function FarmerProfileScreen({ farmerName, onLogout }: FarmerProfileScreenProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -156,6 +157,20 @@ export default function FarmerProfileScreen({ farmerName }: FarmerProfileScreenP
                     />
                 </View>
             )}
+
+            {/* Logout Button */}
+            {onLogout && !isEditing && (
+                <View style={styles.logoutContainer}>
+                    <TouchableOpacity
+                        style={styles.logoutButton}
+                        onPress={onLogout}
+                        activeOpacity={0.7}
+                    >
+                        <Text style={styles.logoutIcon}>🚪</Text>
+                        <Text style={styles.logoutButtonText}>लॉगआउट (Logout)</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </ScrollView>
     );
 }
@@ -262,5 +277,29 @@ const styles = StyleSheet.create({
     actionContainer: {
         marginTop: SPACING.md,
         marginBottom: SPACING.xxl,
+    },
+    logoutContainer: {
+        marginTop: SPACING.xl,
+        marginBottom: SPACING.xxl,
+    },
+    logoutButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: COLORS.white,
+        borderWidth: 2,
+        borderColor: COLORS.error,
+        borderRadius: BORDER_RADIUS.lg,
+        padding: SPACING.lg,
+        ...SHADOWS.small,
+    },
+    logoutIcon: {
+        fontSize: 24,
+        marginRight: SPACING.sm,
+    },
+    logoutButtonText: {
+        fontSize: FONT_SIZES.lg,
+        fontWeight: FONT_WEIGHTS.bold,
+        color: COLORS.error,
     },
 });

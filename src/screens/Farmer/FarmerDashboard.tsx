@@ -132,7 +132,7 @@ export default function FarmerDashboard({
         }
 
         if (activeTab === 'profile') {
-            return <FarmerProfileScreen farmerName={farmerName} />;
+            return <FarmerProfileScreen farmerName={farmerName} onLogout={onLogout} />;
         }
 
         // Home tab - default dashboard
@@ -143,7 +143,7 @@ export default function FarmerDashboard({
                 showsVerticalScrollIndicator={false}
             >
                 {/* Usage Stats Card */}
-                <View style={styles.section}>
+                <View style={[styles.section, styles.firstSection]}>
                     <Text style={styles.sectionTitle}>📊 उपयोग सारांश</Text>
                     <UsageStats
                         used={totalUsed}
@@ -155,12 +155,7 @@ export default function FarmerDashboard({
 
                 {/* Fertilizers Grid */}
                 <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>🌱 उर्वरक चुनें</Text>
-                        <TouchableOpacity onPress={onLogout}>
-                            <Text style={styles.logoutText}>लॉगआउट ›</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <Text style={styles.sectionTitle}>🌱 उर्वरक चुनें</Text>
 
                     <View style={styles.fertilizerGrid}>
                         {fertilizers.map((fertilizer) => (
@@ -256,23 +251,25 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollContent: {
-        paddingBottom: SPACING.xl,
+        paddingBottom: SPACING.xxl,
+    },
+    firstSection: {
+        marginTop: SPACING.md,
     },
     section: {
         paddingHorizontal: SPACING.lg,
-        marginTop: SPACING.lg,
+        marginTop: SPACING.xl,
     },
     sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: SPACING.md,
+        marginBottom: SPACING.sm,
     },
     sectionTitle: {
         fontSize: FONT_SIZES.lg,
         fontWeight: FONT_WEIGHTS.bold,
         color: COLORS.textPrimary,
-        marginBottom: SPACING.md,
     },
     logoutText: {
         fontSize: FONT_SIZES.sm,
@@ -291,16 +288,18 @@ const styles = StyleSheet.create({
     },
     actionCard: {
         width: '48%',
+        minHeight: 120,
         backgroundColor: COLORS.white,
-        borderRadius: BORDER_RADIUS.md,
+        borderRadius: BORDER_RADIUS.lg,
         padding: SPACING.lg,
         alignItems: 'center',
+        justifyContent: 'center',
         marginBottom: SPACING.md,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        elevation: 2,
+        elevation: 3,
     },
     primaryAction: {
         backgroundColor: COLORS.primary,
@@ -309,7 +308,7 @@ const styles = StyleSheet.create({
         color: COLORS.white,
     },
     actionEmoji: {
-        fontSize: 32,
+        fontSize: 36,
         marginBottom: SPACING.sm,
     },
     actionText: {
