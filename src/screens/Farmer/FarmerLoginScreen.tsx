@@ -9,9 +9,8 @@ import {
     Platform,
     TouchableOpacity,
     Image,
-    ImageBackground,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import ParticleBackground from '../../components/ParticleBackground';
 import { Button, Card, Input } from '../../components';
 import BackButton from '../../components/BackButton';
 import {
@@ -61,122 +60,103 @@ export default function FarmerLoginScreen({
     };
 
     return (
-        <ImageBackground
-            source={require('../../../assets/fresh-grass-with-bokeh-effect.png')}
-            style={styles.container}
-            blurRadius={0}
-        >
-            <LinearGradient
-                colors={[
-                    'rgba(255, 255, 255, 0.75)',
-                    'rgba(255, 243, 224, 0.80)',
-                    'rgba(255, 224, 178, 0.75)'
-                ]}
-                style={styles.overlay}
-            >
-                <BackButton onPress={onBack} />
-                <SafeAreaView style={styles.safeArea}>
-                    <KeyboardAvoidingView
-                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        style={styles.keyboardView}
+        <ParticleBackground>
+            <BackButton onPress={onBack} />
+            <SafeAreaView style={styles.safeArea}>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={styles.keyboardView}
+                >
+                    <ScrollView
+                        contentContainerStyle={styles.scrollContent}
+                        showsVerticalScrollIndicator={false}
                     >
-                        <ScrollView
-                            contentContainerStyle={styles.scrollContent}
-                            showsVerticalScrollIndicator={false}
-                        >
-                            {/* Header */}
-                            <View style={styles.header}>
-                                <View style={styles.farmerImageContainer}>
-                                    <Image
-                                        source={require('../../../assets/tanrica-farmer-9911436_1920.png')}
-                                        style={styles.farmerImage}
-                                        resizeMode="contain"
-                                    />
-                                </View>
-                                <Text style={styles.title}>👨‍🌾 किसान लॉगिन</Text>
-                                <Text style={styles.subtitle}>
-                                    अपने मोबाइल नंबर और पासवर्ड से लॉगिन करें
-                                </Text>
+                        {/* Header */}
+                        <View style={styles.header}>
+                            <View style={styles.farmerImageContainer}>
+                                <Image
+                                    source={require('../../../assets/tanrica-farmer-9911436_1920.png')}
+                                    style={styles.farmerImage}
+                                    resizeMode="contain"
+                                />
                             </View>
+                            <Text style={styles.title}>किसान लॉगिन</Text>
+                            <Text style={styles.subtitle}>
+                                अपने मोबाइल नंबर और पासवर्ड से लॉगिन करें
+                            </Text>
+                        </View>
 
-                            {/* Login Form */}
-                            <Card style={styles.formCard}>
-                                <Input
-                                    label={HINDI_TEXT.mobileNumber}
-                                    placeholder="10 अंक का मोबाइल नंबर"
-                                    value={mobileNumber}
-                                    onChangeText={(value) => {
-                                        setMobileNumber(value);
-                                        if (errors.mobileNumber) {
-                                            setErrors((prev) => ({ ...prev, mobileNumber: '' }));
-                                        }
-                                    }}
-                                    keyboardType="phone-pad"
-                                    maxLength={10}
-                                    error={errors.mobileNumber}
-                                    required
-                                    icon={<Text style={styles.inputIcon}>📱</Text>}
-                                />
+                        {/* Login Form */}
+                        <Card style={styles.formCard}>
+                            <Input
+                                label={HINDI_TEXT.mobileNumber}
+                                placeholder="10 अंक का मोबाइल नंबर"
+                                value={mobileNumber}
+                                onChangeText={(value) => {
+                                    setMobileNumber(value);
+                                    if (errors.mobileNumber) {
+                                        setErrors((prev) => ({ ...prev, mobileNumber: '' }));
+                                    }
+                                }}
+                                keyboardType="phone-pad"
+                                maxLength={10}
+                                error={errors.mobileNumber}
+                                required
+                                icon={<Text style={styles.inputIcon}>📱</Text>}
+                            />
 
-                                <Input
-                                    label={HINDI_TEXT.password}
-                                    placeholder="पासवर्ड दर्ज करें"
-                                    value={password}
-                                    onChangeText={(value) => {
-                                        setPassword(value);
-                                        if (errors.password) {
-                                            setErrors((prev) => ({ ...prev, password: '' }));
-                                        }
-                                    }}
-                                    secureTextEntry
-                                    error={errors.password}
-                                    required
-                                    icon={<Text style={styles.inputIcon}>🔒</Text>}
-                                />
+                            <Input
+                                label={HINDI_TEXT.password}
+                                placeholder="पासवर्ड दर्ज करें"
+                                value={password}
+                                onChangeText={(value) => {
+                                    setPassword(value);
+                                    if (errors.password) {
+                                        setErrors((prev) => ({ ...prev, password: '' }));
+                                    }
+                                }}
+                                secureTextEntry
+                                error={errors.password}
+                                required
+                                icon={<Text style={styles.inputIcon}>🔒</Text>}
+                            />
 
-                                {onForgotPassword && (
-                                    <TouchableOpacity
-                                        onPress={onForgotPassword}
-                                        style={styles.forgotPassword}
-                                    >
-                                        <Text style={styles.forgotPasswordText}>
-                                            पासवर्ड भूल गए?
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
+                            {onForgotPassword && (
+                                <TouchableOpacity
+                                    onPress={onForgotPassword}
+                                    style={styles.forgotPassword}
+                                >
+                                    <Text style={styles.forgotPasswordText}>
+                                        पासवर्ड भूल गए?
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
 
-                                <Button
-                                    title={HINDI_TEXT.login}
-                                    onPress={handleLogin}
-                                    size="large"
-                                    style={styles.loginButton}
-                                />
-                            </Card>
+                            <Button
+                                title={HINDI_TEXT.login}
+                                onPress={handleLogin}
+                                size="large"
+                                style={styles.loginButton}
+                            />
+                        </Card>
 
-                            {/* Helper Text */}
-                            <View style={styles.helperContainer}>
-                                <Text style={styles.helperText}>
-                                    💡 पहली बार उपयोग कर रहे हैं?
-                                </Text>
-                                <Text style={styles.helperText}>
-                                    कृपया पहले पंजीकरण करें
-                                </Text>
-                            </View>
-                        </ScrollView>
-                    </KeyboardAvoidingView>
-                </SafeAreaView>
-            </LinearGradient>
-        </ImageBackground>
+                        {/* Helper Text */}
+                        <View style={styles.helperContainer}>
+                            <Text style={styles.helperText}>
+                                💡 पहली बार उपयोग कर रहे हैं?
+                            </Text>
+                            <Text style={styles.helperText}>
+                                कृपया पहले पंजीकरण करें
+                            </Text>
+                        </View>
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+        </ParticleBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    overlay: {
-        flex: 1,
-    },
     farmerImageContainer: {
         width: 130,
         height: 130,

@@ -65,14 +65,14 @@ export default function FertilizerCard({
                     {isAvailable ? (
                         <>
                             <Text style={styles.availabilityText}>
-                                ✅ {availableQuantity} बोरी उपलब्ध
+                                {availableQuantity} बोरी उपलब्ध
                             </Text>
                             <View style={styles.arrow}>
-                                <Text style={styles.arrowText}>›</Text>
+                                <Text style={styles.arrowText}>➜</Text>
                             </View>
                         </>
                     ) : (
-                        <Text style={styles.unavailableText}>❌ कोटा समाप्त</Text>
+                        <Text style={styles.unavailableText}>कोटा समाप्त</Text>
                     )}
                 </View>
             </LinearGradient>
@@ -83,7 +83,7 @@ export default function FertilizerCard({
 const styles = StyleSheet.create({
     container: {
         width: '48%',
-        minHeight: 180,
+        height: 190,
         marginBottom: SPACING.md,
         borderRadius: BORDER_RADIUS.lg,
         overflow: 'hidden',
@@ -161,16 +161,19 @@ const styles = StyleSheet.create({
         fontWeight: FONT_WEIGHTS.semibold,
     },
     arrow: {
-        width: 28,
-        height: 28,
-        borderRadius: 14,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
         backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
+        ...SHADOWS.medium,
+        elevation: 4,
     },
     arrowText: {
-        fontSize: 20,
+        fontSize: 24,
         color: COLORS.white,
-        fontWeight: FONT_WEIGHTS.bold,
+        fontWeight: 'bold',
+        marginTop: -2, // Visual adjustment for centering
     },
 });

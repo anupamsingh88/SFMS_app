@@ -78,7 +78,7 @@ export default function SuperAdminDashboard({ onBack, onNavigateToGlobal, onNavi
 
     const fetchStats = async () => {
         try {
-            const response = await fetch(API_ENDPOINTS.getPendingApprovals);
+            const response = await fetch(API_ENDPOINTS.getUsersPendingApproval);
             const result = await response.json();
             if (result.success) {
                 setStats(result.data.stats);
@@ -150,7 +150,7 @@ export default function SuperAdminDashboard({ onBack, onNavigateToGlobal, onNavi
                     <View style={styles.statsRow}>
                         <StatsCard
                             title="किसान"
-                            icon="👨‍🌾"
+                            icon="📊"
                             total={stats?.farmers.total || 0}
                             pending={stats?.farmers.pending || 0}
                             active={stats?.farmers.active || 0}
@@ -179,7 +179,7 @@ export default function SuperAdminDashboard({ onBack, onNavigateToGlobal, onNavi
                     />
 
                     <CategoryCard
-                        icon="👨‍🌾"
+                        icon="⚙️"
                         title="Farmer Settings"
                         subtitle="किसान सेटिंग्स"
                         description="Seasonal Allotments, Approvals"

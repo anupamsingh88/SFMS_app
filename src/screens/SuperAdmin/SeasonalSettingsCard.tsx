@@ -43,9 +43,12 @@ export default function SeasonalSettingsCard() {
                     });
                 });
                 setSeasonalData(data);
+            } else {
+                setSeasonalData([]);
             }
         } catch (error) {
             console.error('Fetch error:', error);
+            setSeasonalData([]);
         }
     };
 

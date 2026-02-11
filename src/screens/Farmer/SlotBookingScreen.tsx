@@ -20,6 +20,7 @@ import {
     BORDER_RADIUS,
     SHADOWS,
 } from '../../constants';
+import { API_ENDPOINTS } from '../../config/config';
 // import DateTimePicker from '@react-native-community/datetimepicker'; // If you have this installed, otherwise we'll use a simple mock date picker
 
 interface Retailer {
@@ -65,8 +66,34 @@ export default function SlotBookingScreen({
     const [stocks, setStocks] = useState<FertilizerStock[]>([]);
 
     useEffect(() => {
-        // Simulate fetching stock
-        setStocks(Object.values(MOCK_STOCKS));
+        // Fetch fertilizer prices from database and update stocks
+        const fetchPricesAndStocks = async () => {
+            try {
+                const response = await fetch(API_ENDPOINTS.getFertilizerPrices);
+                const data = await response.json();
+
+                if (data.success && data.prices) {
+                    // Update MOCK_STOCKS with fetched prices
+                    const updatedStocks = Object.values(MOCK_STOCKS).map(stock => {
+                        const priceData = data.prices.find((p: any) => p.type === stock.id);
+                        if (priceData) {
+                            return { ...stock, price: priceData.pricePerBag };
+                        }
+                        return stock;
+                    });
+                    setStocks(updatedStocks);
+                } else {
+                    // Fallback to MOCK_STOCKS if API fails
+                    setStocks(Object.values(MOCK_STOCKS));
+                }
+            } catch (error) {
+                console.error('Error fetching prices:', error);
+                // Fallback to MOCK_STOCKS if API fails
+                setStocks(Object.values(MOCK_STOCKS));
+            }
+        };
+
+        fetchPricesAndStocks();
     }, [selectedDate]); // Refetch when date changes
 
 
@@ -165,8 +192,6 @@ export default function SlotBookingScreen({
             style={styles.container}
         >
             <SafeAreaView style={styles.safeArea}>
-                <FarmerHero name={farmerName} subtitle="अपनी उर्वरक कोटा प्रबंधित करें" />
-
                 <View style={styles.header}>
                     <TouchableOpacity onPress={onBack} style={styles.backButton}>
                         <Text style={styles.backIcon}>{'<'}</Text>
@@ -196,14 +221,9 @@ export default function SlotBookingScreen({
                                 <View style={styles.stockInfo}>
                                     <Text style={styles.stockName}>{stock.nameHindi} ({stock.name})</Text>
                                     <Text style={styles.stockPrice}>₹{stock.price} / बोरी</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
-                                        <Text style={{ fontSize: 12, color: COLORS.success, fontWeight: 'bold' }}>
-                                            ✅ उपलब्ध स्टॉक: {stock.availableStock} बोरी
-                                        </Text>
-                                        <Text style={{ fontSize: 12, color: COLORS.textSecondary, marginLeft: 8 }}>
-                                            | 🛑 कोटा शेष: {stock.userQuotaRemaining}
-                                        </Text>
-                                    </View>
+                                    <Text style={{ fontSize: 12, color: COLORS.warning, fontWeight: 'bold', marginTop: 4 }}>
+                                        कोटा शेष: {stock.userQuotaRemaining} बोरी
+                                    </Text>
                                 </View>
 
                                 <View style={styles.counter}>
@@ -241,7 +261,9 @@ export default function SlotBookingScreen({
                         <Button
                             title="बुकिंग कन्फर्म करें"
                             onPress={handleBooking}
+                            size="large"
                             style={styles.bookBtn}
+                            textStyle={{ fontSize: FONT_SIZES.xl }}
                         />
                     </View>
                 )}
@@ -341,5 +363,5 @@ const styles = StyleSheet.create({
     },
     footerLabel: { fontSize: FONT_SIZES.sm, color: COLORS.textSecondary },
     footerPrice: { fontSize: FONT_SIZES.xl, fontWeight: 'bold', color: COLORS.primary },
-    bookBtn: { minWidth: 150 }
+    bookBtn: { width: 220 }
 });

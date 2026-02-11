@@ -33,7 +33,7 @@ export default function TokenQRScreen({
     onBackToDashboard,
     onSaveQR,
 }: TokenQRScreenProps) {
-    const qrRef = useRef<any>();
+    const qrRef = useRef<any>(null);
 
     const handleShare = () => {
         // In a real app, implement share functionality
@@ -172,7 +172,7 @@ export default function TokenQRScreen({
                     </Card>
 
                     {/* Important Instructions */}
-                    <Card style={[styles.instructionCard, styles.warningCard]}>
+                    <Card style={[styles.instructionCard, styles.warningCard] as any}>
                         <Text style={styles.instructionTitle}>⚠️ महत्वपूर्ण निर्देश</Text>
                         <Text style={styles.instructionText}>
                             • निर्धारित समय पर ही दुकान पर पहुंचें
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
         marginBottom: SPACING.lg,
     },
     successEmoji: {
-        fontSize: 60,
+        fontSize: 40,
     },
     title: {
         fontSize: FONT_SIZES.xxl,

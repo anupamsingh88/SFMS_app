@@ -28,7 +28,7 @@ export default function UserManagementCard({ stats, onRefresh }: UserManagementC
     const fetchPendingUsers = async () => {
         setLoading(true);
         try {
-            const response = await fetch(API_ENDPOINTS.getPendingApprovals);
+            const response = await fetch(API_ENDPOINTS.getUsersPendingApproval);
             const result = await response.json();
 
             if (result.success) {
@@ -85,7 +85,7 @@ export default function UserManagementCard({ stats, onRefresh }: UserManagementC
     const renderUser = ({ item }: { item: PendingUser }) => (
         <View style={styles.userCard}>
             <View style={styles.userInfo}>
-                <Text style={styles.userIcon}>{item.userType === 'farmer' ? '👨‍🌾' : '🏪'}</Text>
+                <Text style={styles.userIcon}>{item.userType === 'farmer' ? 'F' : '🏪'}</Text>
                 <View style={styles.userDetails}>
                     <Text style={styles.userName}>{item.name}</Text>
                     <Text style={styles.userMobile}>📱 {item.mobile}</Text>

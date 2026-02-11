@@ -23,7 +23,7 @@ export default function RetailerManagementCard() {
     const fetchPendingRetailers = async () => {
         setLoading(true);
         try {
-            const response = await fetch(API_ENDPOINTS.getPendingApprovals);
+            const response = await fetch(API_ENDPOINTS.getUsersPendingApproval);
             const result = await response.json();
 
             if (result.success) {

@@ -72,14 +72,15 @@ export const SPACING = {
 };
 
 // Font Sizes
+// Font Sizes
 export const FONT_SIZES = {
-  xs: 13,
-  sm: 15,
-  md: 17,
-  lg: 20,
-  xl: 24,
-  xxl: 30,
-  xxxl: 38,
+  xs: 15,
+  sm: 17,
+  md: 19,
+  lg: 22,
+  xl: 26,
+  xxl: 32,
+  xxxl: 40,
 };
 
 // Font Weights

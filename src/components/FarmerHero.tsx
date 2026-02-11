@@ -25,7 +25,7 @@ export default function FarmerHero({ name, subtitle }: FarmerHeroProps) {
                         colors={[COLORS.white, COLORS.backgroundLight] as readonly [string, string, ...string[]]}
                         style={styles.avatar}
                     >
-                        <Text style={styles.avatarEmoji}>👨‍🌾</Text>
+                        <Text style={styles.avatarText}>{name.charAt(0).toUpperCase()}</Text>
                     </LinearGradient>
                 </View>
 
@@ -82,8 +82,10 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
         elevation: 6,
     },
-    avatarEmoji: {
+    avatarText: {
         fontSize: 36,
+        fontWeight: 'bold',
+        color: COLORS.primary,
     },
     textContainer: {
         flex: 1,

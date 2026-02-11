@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     ScrollView,
     Alert,
-    Platform
+    Platform,
+    Image
 } from 'react-native';
 import { Card, Input, Button } from '../../components';
 import { COLORS, SPACING, FONT_SIZES, FONT_WEIGHTS, BORDER_RADIUS, SHADOWS } from '../../constants';
@@ -31,6 +32,7 @@ export default function FarmerProfileScreen({ farmerName, onLogout }: FarmerProf
         district: 'हापुड़',
         khasraNumber: '124/A',
         landArea: '2.5', // Hectares
+        profile_photo: null as string | null, // Profile photo URL
     });
 
     const [editedProfile, setEditedProfile] = useState(profile);
@@ -92,12 +94,23 @@ export default function FarmerProfileScreen({ farmerName, onLogout }: FarmerProf
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
             {/* Header Profile Section */}
             <View style={styles.profileHeader}>
-                <View style={styles.avatarContainer}>
-                    <Text style={styles.avatarText}>{profile.name.charAt(0)}</Text>
-                </View>
+                <TouchableOpacity style={styles.avatarContainer} onPress={() => Alert.alert('फोटो बदलें', 'Photo upload feature coming soon!')}>
+                    {profile.profile_photo ? (
+                        <Image
+                            source={{ uri: `http://localhost/backend/${profile.profile_photo}` }}
+                            style={styles.avatarImage}
+                            resizeMode="cover"
+                        />
+                    ) : (
+                        <Text style={styles.avatarText}>{profile.name.charAt(0)}</Text>
+                    )}
+                    <View style={styles.cameraIcon}>
+                        <Text style={styles.cameraIconText}>📷</Text>
+                    </View>
+                </TouchableOpacity>
                 <View style={styles.headerInfo}>
                     <Text style={styles.headerName}>{profile.name}</Text>
-                    <Text style={styles.headerSub}>👨‍🌾 पंजीकृत किसान</Text>
+                    <Text style={styles.headerSub}>पंजीकृत किसान</Text>
                 </View>
                 <TouchableOpacity onPress={handleEditToggle} style={styles.editButton}>
                     <Text style={styles.editButtonText}>{isEditing ? '❌ रद्द करें' : '✏️ संपादित करें'}</Text>
@@ -207,6 +220,27 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: COLORS.primary,
     },
+    avatarImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+    },
+    cameraIcon: {
+        position: 'absolute',
+        bottom: 0,
+        right: -2,
+        backgroundColor: COLORS.white,
+        borderRadius: 12,
+        width: 24,
+        height: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: COLORS.primary,
+    },
+    cameraIconText: {
+        fontSize: 12,
+    },
     headerInfo: {
         flex: 1,
     },
@@ -290,7 +324,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: COLORS.error,
         borderRadius: BORDER_RADIUS.lg,
-        padding: SPACING.lg,
+        padding: SPACING.md,
         ...SHADOWS.small,
     },
     logoutIcon: {
@@ -298,7 +332,7 @@ const styles = StyleSheet.create({
         marginRight: SPACING.sm,
     },
     logoutButtonText: {
-        fontSize: FONT_SIZES.lg,
+        fontSize: FONT_SIZES.xl,
         fontWeight: FONT_WEIGHTS.bold,
         color: COLORS.error,
     },

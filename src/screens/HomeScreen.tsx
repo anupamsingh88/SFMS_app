@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button } from '../components';
+import { Button, Card } from '../components';
 import LogoPlaceholder from '../components/LogoPlaceholder';
 import {
     COLORS,
@@ -36,43 +36,47 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
 
                     {/* Main Action Buttons */}
                     <View style={styles.buttonContainer}>
-                        <Text style={styles.sectionTitle}>👨‍🌾 किसान के लिए</Text>
+                        {/* Farmer Card */}
+                        <Card style={styles.card}>
+                            <Text style={styles.sectionTitle}>किसान के लिए</Text>
 
-                        <Button
-                            title={HINDI_TEXT.farmerRegistration}
-                            onPress={() => onNavigate('FarmerRegistration')}
-                            size="large"
-                            variant="primary"
-                            style={styles.button}
-                        />
+                            <Button
+                                title={HINDI_TEXT.farmerRegistration}
+                                onPress={() => onNavigate('FarmerRegistration')}
+                                size="large"
+                                variant="primary"
+                                style={styles.button}
+                            />
 
-                        <Button
-                            title={HINDI_TEXT.farmerLogin}
-                            onPress={() => onNavigate('FarmerLogin')}
-                            size="large"
-                            variant="primary"
-                            style={styles.button}
-                        />
+                            <Button
+                                title={HINDI_TEXT.farmerLogin}
+                                onPress={() => onNavigate('FarmerLogin')}
+                                size="large"
+                                variant="primary"
+                                style={styles.button}
+                            />
+                        </Card>
 
-                        <View style={styles.divider} />
+                        {/* Retailer Card */}
+                        <Card style={styles.card}>
+                            <Text style={styles.sectionTitle}>🏪 दुकानदार (PACS) के लिए</Text>
 
-                        <Text style={styles.sectionTitle}>🏪 दुकानदार (PACS) के लिए</Text>
+                            <Button
+                                title={HINDI_TEXT.retailerRegistration}
+                                onPress={() => onNavigate('RetailerRegistration')}
+                                size="large"
+                                variant="secondary"
+                                style={styles.button}
+                            />
 
-                        <Button
-                            title={HINDI_TEXT.retailerRegistration}
-                            onPress={() => onNavigate('RetailerRegistration')}
-                            size="large"
-                            variant="secondary"
-                            style={styles.button}
-                        />
-
-                        <Button
-                            title={HINDI_TEXT.retailerLogin}
-                            onPress={() => onNavigate('RetailerLogin')}
-                            size="large"
-                            variant="secondary"
-                            style={styles.button}
-                        />
+                            <Button
+                                title={HINDI_TEXT.retailerLogin}
+                                onPress={() => onNavigate('RetailerLogin')}
+                                size="large"
+                                variant="secondary"
+                                style={styles.button}
+                            />
+                        </Card>
                     </View>
 
                     {/* Footer */}
@@ -120,25 +124,24 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
     },
+    card: {
+        marginBottom: SPACING.xl,
+        padding: SPACING.lg,
+    },
     sectionTitle: {
         fontSize: FONT_SIZES.lg,
         fontWeight: FONT_WEIGHTS.semibold,
         color: COLORS.textPrimary,
         marginBottom: SPACING.lg,
-        marginTop: SPACING.md,
+        textAlign: 'center',
     },
     button: {
-        marginBottom: SPACING.lg,
-    },
-    divider: {
-        height: 1,
-        backgroundColor: COLORS.grayLight,
-        marginVertical: SPACING.xl,
+        marginBottom: SPACING.md,
     },
     footer: {
         alignItems: 'center',
-        marginTop: SPACING.xl,
-        paddingTop: SPACING.lg,
+        marginTop: SPACING.lg,
+        paddingBottom: SPACING.lg,
     },
     footerText: {
         fontSize: FONT_SIZES.sm,

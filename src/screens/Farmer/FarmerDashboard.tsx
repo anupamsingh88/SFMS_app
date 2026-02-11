@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import {
     BottomNavigation,
     FarmerHero,
@@ -8,8 +8,12 @@ import {
 } from '../../components';
 import AdviceScreen from './AdviceScreen';
 import RetailerSelectionScreen from './RetailerSelectionScreen';
+import SlotBookingScreen from './SlotBookingScreen';
+import TokenQRScreen from './TokenQRScreen';
 import FarmerProfileScreen from './FarmerProfileScreen';
 import { COLORS, SPACING, FONT_SIZES, FONT_WEIGHTS, BORDER_RADIUS } from '../../constants';
+import { API_ENDPOINTS } from '../../config/config';
+import { Booking } from '../../types';
 
 interface Fertilizer {
     id: string;
@@ -40,6 +44,42 @@ export default function FarmerDashboard({
     onLogout,
 }: FarmerDashboardProps) {
     const [activeTab, setActiveTab] = useState<'home' | 'advice' | 'profile' | 'bookings' | 'request'>('home');
+    const [selectedRetailer, setSelectedRetailer] = useState<any | null>(null);
+    const [fertilizerPrices, setFertilizerPrices] = useState<any>({});
+    const [pricesLoaded, setPricesLoaded] = useState(false);
+    const [currentBooking, setCurrentBooking] = useState<Booking | null>(null);
+    const [localBookings, setLocalBookings] = useState<Booking[]>([]);
+
+    // Fetch fertilizer prices from database
+    useEffect(() => {
+        const fetchPrices = async () => {
+            try {
+                const response = await fetch(API_ENDPOINTS.getFertilizerPrices);
+                const data = await response.json();
+
+                if (data.success && data.prices) {
+                    // Convert array to object with type as key
+                    const pricesMap: any = {};
+                    data.prices.forEach((price: any) => {
+                        pricesMap[price.type] = price.pricePerBag;
+                    });
+                    setFertilizerPrices(pricesMap);
+                    setPricesLoaded(true);
+                }
+            } catch (error) {
+                console.error('Error fetching fertilizer prices:', error);
+                setPricesLoaded(true); // Still set to true to show default prices
+            }
+        };
+
+        fetchPrices();
+    }, []);
+
+    // Update fertilizer prices with fetched data
+    const fertilizersWithPrices = fertilizers.map(f => ({
+        ...f,
+        pricePerBag: fertilizerPrices[f.type] || f.pricePerBag
+    }));
 
     // Calculate total usage stats
     const totalUsed = fertilizers.reduce((sum, f) => sum + f.quota.usedQuantity, 0);
@@ -54,7 +94,58 @@ export default function FarmerDashboard({
 
 
 
+
         if (activeTab === 'request') {
+            // Show Token/QR if booking just confirmed
+            if (currentBooking) {
+                return (
+                    <TokenQRScreen
+                        booking={currentBooking}
+                        onBackToDashboard={() => {
+                            setCurrentBooking(null);
+                            setActiveTab('home');
+                            setSelectedRetailer(null);
+                        }}
+                    />
+                );
+            }
+
+            // If retailer is selected, show booking form
+            if (selectedRetailer) {
+                return (
+                    <SlotBookingScreen
+                        retailer={selectedRetailer}
+                        farmerName={farmerName}
+                        onConfirmBooking={(data) => {
+                            // Create new booking object
+                            const newBooking: Booking = {
+                                id: Date.now().toString(),
+                                farmerId: 'farmer-1', // Mock ID
+                                retailerId: data.retailer.shopName,
+                                items: data.items,
+                                totalPrice: data.totalPrice,
+                                bookingDate: data.date,
+                                status: 'confirmed',
+                                tokenNumber: data.token.toString(),
+                                qrCode: JSON.stringify({
+                                    id: Date.now().toString(),
+                                    items: data.items,
+                                    token: data.token
+                                }),
+                                createdAt: new Date().toISOString(),
+                                updatedAt: new Date().toISOString(),
+                            };
+
+                            setLocalBookings(prev => [newBooking, ...prev]);
+                            setCurrentBooking(newBooking);
+                            // Alert.alert('बुकिंग सफल', 'आपकी बुकिंग सफलतापूर्वक हो गई है!'); // Removed simple alert
+                        }}
+                        onBack={() => setSelectedRetailer(null)}
+                    />
+                );
+            }
+
+            // Otherwise show retailer selection
             return (
                 <RetailerSelectionScreen
                     retailers={[
@@ -81,14 +172,44 @@ export default function FarmerDashboard({
                             licenseNumber: 'PACS123457',
                         },
                     ]}
-                    onSelectRetailer={(id) => onBookSlot(id)}
+                    onSelectRetailer={(id) => {
+                        // Find the selected retailer
+                        const retailer = [
+                            {
+                                id: 'r1',
+                                name: 'राम प्रसाद',
+                                shopName: 'ग्राम सेवा सहकारी समिति',
+                                mobileNumber: '9876543210',
+                                address: 'मुख्य मार्ग, बहादुरगंज, जिला - हापुड़',
+                                district: 'Hapur',
+                                role: 'retailer' as const,
+                                createdAt: '2024-01-01',
+                                licenseNumber: 'PACS123456',
+                            },
+                            {
+                                id: 'r2',
+                                name: 'मोहन लाल',
+                                shopName: 'किसान सहकारी भंडार',
+                                mobileNumber: '9876543211',
+                                address: 'बाज़ार रोड, पिलखुआ, जिला - हापुड़',
+                                district: 'Hapur',
+                                role: 'retailer' as const,
+                                createdAt: '2024-01-01',
+                                licenseNumber: 'PACS123457',
+                            },
+                        ].find(r => r.id === id);
+                        setSelectedRetailer(retailer);
+                    }}
                     onBack={() => setActiveTab('home')}
                     embedded={true}
                 />
             );
         }
 
+
         if (activeTab === 'bookings') {
+            const allBookings = [...localBookings, ...(myBookings || [])];
+
             return (
                 <ScrollView
                     style={styles.scrollView}
@@ -97,8 +218,8 @@ export default function FarmerDashboard({
                 >
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>📅 मेरी बुकिंग (My Bookings)</Text>
-                        {myBookings && myBookings.length > 0 ? (
-                            myBookings.map((booking, index) => (
+                        {allBookings && allBookings.length > 0 ? (
+                            allBookings.map((booking, index) => (
                                 <View key={index} style={styles.bookingCard}>
                                     <View style={styles.bookingHeader}>
                                         <Text style={styles.bookingToken}>Token: {booking.tokenNumber}</Text>
@@ -155,10 +276,10 @@ export default function FarmerDashboard({
 
                 {/* Fertilizers Grid */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>🌱 उर्वरक चुनें</Text>
+                    <Text style={styles.sectionTitle}>उर्वरक चुनें</Text>
 
                     <View style={styles.fertilizerGrid}>
-                        {fertilizers.map((fertilizer) => (
+                        {fertilizersWithPrices.map((fertilizer) => (
                             <FertilizerCard
                                 key={fertilizer.id}
                                 id={fertilizer.id}
@@ -167,7 +288,11 @@ export default function FarmerDashboard({
                                 type={fertilizer.type}
                                 price={fertilizer.pricePerBag}
                                 availableQuantity={fertilizer.quota.remainingQuantity}
-                                onPress={() => setActiveTab('request')}
+                                onPress={() => {
+                                    // Auto-add 1 bag and navigate to request form
+                                    // onBookSlot(fertilizer.id); // Removed to prevent navigation away from Dashboard
+                                    setActiveTab('request');
+                                }}
                             />
                         ))}
                     </View>
@@ -270,6 +395,7 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES.lg,
         fontWeight: FONT_WEIGHTS.bold,
         color: COLORS.textPrimary,
+        marginBottom: SPACING.lg,
     },
     logoutText: {
         fontSize: FONT_SIZES.sm,

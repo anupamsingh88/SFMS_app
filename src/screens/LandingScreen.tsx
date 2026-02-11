@@ -52,7 +52,6 @@ export default function LandingScreen({ onNavigate }: LandingScreenProps) {
                             activeOpacity={0.8}
                             onPress={() => setRole(role === 'farmer' ? null : 'farmer')}
                         >
-                            <Text style={styles.roleEmoji}>👨‍🌾</Text>
                             <Text style={styles.roleTitle}>किसान (Farmer)</Text>
 
                             {role === 'farmer' && (
@@ -61,7 +60,14 @@ export default function LandingScreen({ onNavigate }: LandingScreenProps) {
                                         style={[styles.actionButton, { backgroundColor: COLORS.success }]}
                                         onPress={() => onNavigate('FarmerRegistration')}
                                     >
-                                        <Text style={styles.actionButtonText}>पंजीकरण (Register)</Text>
+                                        <Text
+                                            style={styles.actionButtonText}
+                                            numberOfLines={1}
+                                            adjustsFontSizeToFit
+                                            minimumFontScale={0.5}
+                                        >
+                                            पंजीकरण (Register)
+                                        </Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
@@ -70,7 +76,14 @@ export default function LandingScreen({ onNavigate }: LandingScreenProps) {
                                         // onNavigate('FarmerLogin') 
                                         onPress={() => onNavigate('FarmerLogin')}
                                     >
-                                        <Text style={styles.actionButtonText}>लॉगिन (Login)</Text>
+                                        <Text
+                                            style={styles.actionButtonText}
+                                            numberOfLines={1}
+                                            adjustsFontSizeToFit
+                                            minimumFontScale={0.5}
+                                        >
+                                            लॉगिन (Login)
+                                        </Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
@@ -95,14 +108,28 @@ export default function LandingScreen({ onNavigate }: LandingScreenProps) {
                                         style={[styles.actionButton, { backgroundColor: COLORS.secondary }]}
                                         onPress={() => onNavigate('RetailerRegistration')}
                                     >
-                                        <Text style={styles.actionButtonText}>पंजीकरण (Register)</Text>
+                                        <Text
+                                            style={styles.actionButtonText}
+                                            numberOfLines={1}
+                                            adjustsFontSizeToFit
+                                            minimumFontScale={0.5}
+                                        >
+                                            पंजीकरण (Register)
+                                        </Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={[styles.actionButton, { backgroundColor: COLORS.primary }]}
                                         onPress={() => onNavigate('RetailerLogin')}
                                     >
-                                        <Text style={styles.actionButtonText}>लॉगिन (Login)</Text>
+                                        <Text
+                                            style={styles.actionButtonText}
+                                            numberOfLines={1}
+                                            adjustsFontSizeToFit
+                                            minimumFontScale={0.5}
+                                        >
+                                            लॉगिन (Login)
+                                        </Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
@@ -135,8 +162,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: FONT_SIZES.xxl,
         fontWeight: FONT_WEIGHTS.bold,
-        color: COLORS.textPrimary,
-        marginTop: SPACING.md,
         color: COLORS.textPrimary,
         marginTop: SPACING.md,
         textAlign: 'center',
@@ -186,22 +211,21 @@ const styles = StyleSheet.create({
     actionButtons: {
         width: '100%',
         marginTop: SPACING.md,
-        gap: SPACING.sm,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        gap: SPACING.md,
+        flexDirection: 'column',
     },
     actionButton: {
-        flex: 1,
-        paddingVertical: SPACING.md,
+        width: '100%',
+        paddingVertical: SPACING.md + 4,
         borderRadius: BORDER_RADIUS.lg,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: SPACING.xs,
     },
     actionButtonText: {
         color: COLORS.white,
         fontWeight: FONT_WEIGHTS.bold,
-        fontSize: FONT_SIZES.md,
+        fontSize: FONT_SIZES.xl,
+        textAlign: 'center',
     },
     footer: {
         alignItems: 'center',

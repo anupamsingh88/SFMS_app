@@ -17,30 +17,35 @@ export const API_BASE_URL = 'http://192.168.29.97:8080/backend';
  * All API endpoints are defined here for easy maintenance
  */
 export const API_ENDPOINTS = {
-    // Farmer Registration
+    // Farmer endpoints
     registerFarmer: `${API_BASE_URL}/register_farmer.php`,
+    loginFarmer: `${API_BASE_URL}/login_farmer.php`,
+    getDistricts: `${API_BASE_URL}/get_districts.php`,
+    getLocations: `${API_BASE_URL}/get_locations.php`,
 
-    // Retailer Auth
+    // Retailer endpoints
     registerRetailer: `${API_BASE_URL}/register_retailer.php`,
     loginRetailer: `${API_BASE_URL}/login_retailer.php`,
 
-    // Location Data
-    getLocations: `${API_BASE_URL}/get_locations.php`,
+    // Super Admin endpoints
+    getUsersPendingApproval: `${API_BASE_URL}/get_pending_approvals.php`, // Renamed from getPendingApprovals
+    updateApprovalStatus: `${API_BASE_URL}/update_approval_status.php`,
+    getSeasonalSetting: `${API_BASE_URL}/get_seasonal_setting.php`,
+    updateSeasonalSetting: `${API_BASE_URL}/update_seasonal_setting.php`,
+    manageUsers: `${API_BASE_URL}/manage_users.php`, // Moved from SuperAdmin User Management section
+    getFertilizerPrices: `${API_BASE_URL}/get_fertilizer_prices.php`, // New endpoint
 
-    // Farmer Approval (Admin)
-    approveFarmer: `${API_BASE_URL}/approve_farmer.php`,
+    // Advisory Tips endpoints
+    getAdvisoryTips: `${API_BASE_URL}/get_advisory_tips.php`,
+    manageAdvisoryTips: `${API_BASE_URL}/manage_advisory_tips.php`,
 
-    // SuperAdmin Settings Management
+    // App Content Management endpoints
+    getAppContent: `${API_BASE_URL}/get_app_content.php`,
+    manageAppContent: `${API_BASE_URL}/manage_app_content.php`,
+
+    // Settings endpoints
     getSettings: `${API_BASE_URL}/get_settings.php`,
     updateSetting: `${API_BASE_URL}/update_setting.php`,
-    updateSeasonalSetting: `${API_BASE_URL}/update_seasonal_setting.php`,
-
-    // SuperAdmin User Management
-    manageUsers: `${API_BASE_URL}/manage_users.php`,
-    getPendingApprovals: `${API_BASE_URL}/get_pending_approvals.php`,
-
-    // SuperAdmin Advisory Management
-    manageAdvisory: `${API_BASE_URL}/manage_advisory.php`,
 
     // Media Upload
     uploadMedia: `${API_BASE_URL}/upload_media.php`,
@@ -53,17 +58,6 @@ export const SUPERADMIN_CREDENTIALS = {
     username: 'sadmin',
     password: 'weknowtech'
 } as const;
-
-/**
- * Helper function to build location API URL with query parameters
- */
-export const buildLocationUrl = (type: string, parentId?: string): string => {
-    let url = `${API_ENDPOINTS.getLocations}?type=${type}`;
-    if (parentId) {
-        url += `&parent_id=${parentId}`;
-    }
-    return url;
-};
 
 // Export for backwards compatibility
 export { API_BASE_URL as API_URL };

@@ -23,7 +23,7 @@ export default function FarmerManagementCard() {
     const fetchPendingFarmers = async () => {
         setLoading(true);
         try {
-            const response = await fetch(API_ENDPOINTS.getPendingApprovals);
+            const response = await fetch(API_ENDPOINTS.getUsersPendingApproval);
             const result = await response.json();
 
             if (result.success) {
@@ -71,7 +71,7 @@ export default function FarmerManagementCard() {
     return (
         <View style={styles.card}>
             <View style={styles.header}>
-                <Text style={styles.title}>👨‍🌾 किसान मंजूरी</Text>
+                <Text style={styles.title}>किसान मंजूरी</Text>
                 <Text style={styles.subtitle}>
                     {pendingFarmers.length} किसान मंजूरी के लिए इंतजार में
                 </Text>
@@ -89,7 +89,6 @@ export default function FarmerManagementCard() {
                     {pendingFarmers.map((item) => (
                         <View key={item.id} style={styles.farmerCard}>
                             <View style={styles.farmerInfo}>
-                                <Text style={styles.farmerIcon}>👨‍🌾</Text>
                                 <View style={styles.farmerDetails}>
                                     <Text style={styles.farmerName}>{item.name}</Text>
                                     <Text style={styles.farmerMobile}>📱 {item.mobile}</Text>
@@ -195,10 +194,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         flex: 1,
-    },
-    farmerIcon: {
-        fontSize: 32,
-        marginRight: SPACING.md,
     },
     farmerDetails: {
         flex: 1,

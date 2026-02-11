@@ -6,6 +6,7 @@ import {
     ActivityIndicator,
     ViewStyle,
     TextStyle,
+    View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -45,10 +46,10 @@ export default function Button({
     const height = BUTTON_SIZES[size];
     const isDisabled = disabled || loading;
 
-    const getGradientColors = () => {
-        if (variant === 'primary') return GRADIENTS.purple;
-        if (variant === 'secondary') return GRADIENTS.pink;
-        return [COLORS.white, COLORS.white];
+    const getGradientColors = (): readonly [string, string, ...string[]] => {
+        if (variant === 'primary') return GRADIENTS.purple as readonly [string, string, ...string[]];
+        if (variant === 'secondary') return GRADIENTS.pink as readonly [string, string, ...string[]];
+        return [COLORS.white, COLORS.white] as readonly [string, string];
     };
 
     const renderContent = () => {
@@ -69,7 +70,14 @@ export default function Button({
                 ) : (
                     <>
                         {icon && <>{icon}</>}
-                        <Text style={textStyles}>{title}</Text>
+                        <Text
+                            style={textStyles}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                            minimumFontScale={0.5}
+                        >
+                            {title}
+                        </Text>
                     </>
                 )}
             </>
@@ -85,6 +93,7 @@ export default function Button({
                     variant === 'outline' && styles.outlineButton,
                     variant === 'text' && styles.textButton,
                     isDisabled && styles.disabled,
+                    { justifyContent: 'center', alignItems: 'center' },
                     style,
                 ]}
                 onPress={onPress}
@@ -101,13 +110,13 @@ export default function Button({
             onPress={onPress}
             disabled={isDisabled}
             activeOpacity={0.8}
-            style={[{ height }, style]}
+            style={[{ width: '100%', height }, style]}
         >
             <LinearGradient
                 colors={isDisabled ? [COLORS.grayLight, COLORS.gray] : getGradientColors()}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                style={[styles.button, styles.gradientButton, { height }]}
+                style={[styles.button, styles.gradientButton, { height, justifyContent: 'center', alignItems: 'center' }]}
             >
                 {renderContent()}
             </LinearGradient>
@@ -117,13 +126,11 @@ export default function Button({
 
 const styles = StyleSheet.create({
     button: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: '100%',
         borderRadius: BORDER_RADIUS.lg,
-        paddingHorizontal: SPACING.lg,
-        gap: SPACING.sm,
+        overflow: 'hidden',
     },
+    // contentContainer removed
     gradientButton: {
         ...SHADOWS.medium,
     },
@@ -141,6 +148,7 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZES.md,
         fontWeight: FONT_WEIGHTS.semibold,
         textAlign: 'center',
+        textAlignVertical: 'center',
     },
     outlineText: {
         color: COLORS.primary,
