@@ -39,3 +39,24 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Backend files (if in monorepo)
+backend/debug_log.txt
+backend/*.log
+backend/phpMyAdmin/
+
+# Environment files
+.env
+.env.local
+config.local.php
